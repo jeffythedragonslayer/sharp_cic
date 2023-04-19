@@ -43,18 +43,22 @@ struct CIC
 	void op42(); // xchgsk
 	void op43(); // xchgsk
 	void op44(); // neg
+	void op45(); // ???
 	void op46(); // out
 	void op47(); // out
 	void op48(); // set
 	void op49(); // clr
+	void op4B(); // ?
 	void op4C(); // ret
 	void op4D(); // retsk
 	void op54(); // not
 	void op55(); // in
+	void op56(); // ?
 	void op57(); // xchg
 	void op5C(); // mov
 	void op5D(); // xchg
 	void op5E(); // ???
+	void op5F();
 	void op70(); // add
 	void op71(); // addsk
 	void op72(); // adc

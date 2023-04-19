@@ -40,6 +40,10 @@ void CIC::op44() // neg - negate A
 	a = -a; // used by 6113 mode
 }
 
+void CIC::op45() // ?
+{
+}
+
 void CIC::op46() // out - output
 {
 	ports[l] = a;
@@ -58,6 +62,10 @@ void CIC::op48() // set - set carry
 void CIC::op49() // clr - clear carry
 {
 	c = false;
+}
+
+void CIC::op4B() // ?
+{
 }
 
 void CIC::op4C() // ret - return
@@ -83,6 +91,10 @@ void CIC::op55() // in
 	a = ports[l];
 }
 
+void CIC::op56() // ?
+{
+}
+
 void CIC::op57() // xchg - exchange A <--> L
 { 
 	swap(a, l);
@@ -101,6 +113,11 @@ void CIC::op5D() // xchg - exchange X <--> A
 void CIC::op5E() // ???
 {
 	// special mystery instruction	
+	// used by 6113 mode
+}
+
+void CIC::op5F() // ?
+{
 }
 
 void CIC::op70() // add
