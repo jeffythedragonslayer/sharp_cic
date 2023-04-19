@@ -51,6 +51,8 @@ struct CIC
 	void op4B(); // ?
 	void op4C(); // ret
 	void op4D(); // retsk
+	void op52(); // movsk
+	void op53(); // ?
 	void op54(); // not
 	void op55(); // in
 	void op56(); // ?
@@ -58,7 +60,7 @@ struct CIC
 	void op5C(); // mov
 	void op5D(); // xchg
 	void op5E(); // ???
-	void op5F();
+	void op5F(); // ?
 	void op70(); // add
 	void op71(); // addsk
 	void op72(); // adc
@@ -75,8 +77,8 @@ struct CIC
 	void skip();
 	void poly_inc();
 
-	void push();
-	void pop();
+	void push(uint16_t t);
+	void pop(uint16_t t);
 
 	void main();
 	void shutdown();

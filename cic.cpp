@@ -81,6 +81,21 @@ void CIC::op4D() // retsk
 	skip();
 }
 
+void CIC::op52()
+{
+	a = ram[hl()];
+	++l;
+	if ( /* result */ true) {
+		skip(); 
+	}
+}
+
+void CIC::op53()
+{
+	// ?
+	// guess: movsk A, [HL-]
+}
+
 void CIC::op54() // not - complement
 {
 	a ^= 0x0F;
@@ -384,10 +399,10 @@ void CIC::wait(int timer)
 	//Wait until "timer=time", whereas "timer" runs at 1MHz(NES) or 1.024MHz(SNES).The "time" values are showing the <completion> of the I / O opcodes(ie.the I / O opcodes <begin> at "time-1").  
 }
 
-void CIC::push()
+void CIC::push(uint16_t t)
 {
 }
 
-void CIC::pop()
+void CIC::pop(uint16_t t)
 {
 }
