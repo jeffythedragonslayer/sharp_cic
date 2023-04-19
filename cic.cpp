@@ -341,10 +341,43 @@ void CIC::main()
 
 mainloop:
 	for (uint8_t x = a; x < 0x0F; ++x) {
+		// verify idle
+#ifdef NES
+		wait(time - 5);
+#elif SNES
+		wait(time - 7);
+#endif
+		// output data
+		int time = 0;
+		wait(time);
+		if (noswap) P0 = a;
+		else P0 = a;
+
+		// verify input
+		wait(time + 2 - data_rx_error);
+		if (noswap) a ^= P0;
+		else a ^= P0;
+		if (a == 1) shutdown();
+ 
+
+		// output idle
+		wait(time + 3);
+		if (noswap) P0 = 0;
+		else P0 = 0;
+#ifdef SNES
+		time += 92;
+#elif NES
+		time += 79;
+#endif
 
 	}
 	//mangle(0x00);
 	//mangle(0x10);
+
+#ifdef SNES
+	noswap = 0x17; // eventually swap input/output pins (SNES only)
+#endif
+	a = 0x17;
 
 	if (a = 00) {
 		a = 1;
