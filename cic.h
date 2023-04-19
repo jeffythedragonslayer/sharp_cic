@@ -38,6 +38,12 @@ struct CIC
 
 	// opcodes
 	void op00(); // nop
+
+	void op00(uint8_t n); // addsk
+	void op10(uint8_t n); // cmpsk
+	void op20(uint8_t n); // mov
+	void op30(uint8_t n); // mov
+
 	void op40(); // mov
 	void op41(); // xchg
 	void op42(); // xchgsk

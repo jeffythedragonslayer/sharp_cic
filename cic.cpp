@@ -11,6 +11,27 @@ void CIC::op00() // nop - no operation
 {
 }
 
+void CIC::op00(uint8_t n) // addsk - add
+{
+	a += n;
+	if (a > 0x0F) skip();
+}
+
+void CIC::op10(uint8_t n) // cmpsk - compare
+{
+	if ( a == n ) skip();
+}
+
+void CIC::op20(uint8_t n) // mov
+{
+	l = n;
+}
+
+void CIC::op30(uint8_t n) // mov
+{
+	a = n;
+}
+
 void CIC::op40() // mov - move
 {
 	a = ram[hl()];
