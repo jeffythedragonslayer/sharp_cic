@@ -392,11 +392,14 @@ mainloop:
 #endif
 
 	}
-	//mangle(0x00);
-	//mangle(0x10);
+	//mangle(0x00); // mangle
+	//mangle(0x10); // (thrice on SNES) -- nocash
+#ifdef SNES
+
+#endif
 
 #ifdef SNES
-	noswap = 0x17; // eventually swap input/output pins (SNES only)
+	noswap = 0x17; // eventually swap input/output pins (SNES only) -- nocash
 #endif
 	a = 0x17;
 
@@ -455,12 +458,12 @@ void CIC::shutdown()
 	time = 1037682;
 #endif
 
-	for ( ;; ) {
+	for ( ;; ) { // timings here aren't 100.000% accurate -- nocash
 
 		if (console) {
 			//P1 = a;
 			//wait(timer + time);
-			a ^= 4; // toggle reset on/off
+			a ^= 4; // toggle reset on/off -- nocash
 		} else {
 #ifdef SNES
 #ifdef NES_6113
