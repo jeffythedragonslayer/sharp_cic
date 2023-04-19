@@ -30,8 +30,15 @@ struct CIC
 
 	int data_rx_error;
 
+	bool nes_6113_in_console;
+	int P0;
+	int P1;
+
+	int seed_start, data_start;
+
 	// opcodes
 	void op00(); // nop
+	void op40(); // mov
 	void op41(); // xchg
 	void op42(); // xchgsk
 	void op43(); // xchgsk
@@ -52,6 +59,10 @@ struct CIC
 	void op71(); // addsk
 	void op72(); // adc
 	void op73(); // adcsk
+	void op74(); // mov
+	void op75(); // mov
+	void op76(); // mov
+	void op77(); // mov 
 	void op78(); // jmp
 	void op7C(); // call
 	void op80(); // jmp

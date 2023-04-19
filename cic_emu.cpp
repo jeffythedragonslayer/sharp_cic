@@ -2,7 +2,7 @@
 #include "cic.h"
 using namespace std;
 
-int main()
+void test_poly()
 {
 	cout << hex;
 	CIC cic;
@@ -14,4 +14,12 @@ int main()
 		int pc = cic.pc;
 		cout << pc << '\n'; 
 	}
+}
+
+int main()
+{
+	CIC lock, key;
+
+	lock.console = true;
+	key.console = false;
 }

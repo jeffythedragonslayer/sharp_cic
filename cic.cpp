@@ -4,11 +4,16 @@ using namespace std;
 
 uint8_t CIC::hl()
 {
-	return h << 4 || l;
+	return h << 4 | l;
 }
 
 void CIC::op00() // nop - no operation
 {
+}
+
+void CIC::op40() // mov - move
+{
+	a = ram[hl()];
 }
 
 void CIC::op41() // xchg - exchange A <--> RAM[HL]
@@ -32,7 +37,7 @@ void CIC::op43() // xchgsk - exchange A <--> RAM[HL]
 
 void CIC::op44() // neg - negate A
 {
-	a = -a;
+	a = -a; // used by 6113 mode
 }
 
 void CIC::op46() // out - output
@@ -73,7 +78,7 @@ void CIC::op54() // not - complement
 	a ^= 0x0F;
 }
 
-void CIC::op55()
+void CIC::op55() // in
 {
 	a = ports[l];
 }
@@ -116,6 +121,26 @@ void CIC::op73() // adcsk - add with carry
 {
 }
 
+void CIC::op74()
+{
+	h = 0;
+}
+
+void CIC::op75()
+{
+	h = 1;
+}
+
+void CIC::op76()
+{
+	h = 2;
+}
+
+void CIC::op77()
+{
+	h = 3;
+}
+
 void CIC::op78() // jmp - long jump
 { 
 }
@@ -154,17 +179,45 @@ void CIC::poly_inc()
 
 void CIC::init_first()
 {
-	timer = 0;
-	//P0 = 0x00;
-	//console 
+	timer = 0; // reset timer (since reset released)
+	P0 = 0x00;
+	console = P0 & 0x04; // get console/cartridge flag
+	if( console ){
+		uint8_t r = 0;
+		while (P0 & 0x02 == 1) ++r; // get 4bit random seed (capacitor charge time)
+		//P1 & 0x1 = 1;
+		//P1
+
+		// issue reset to CIC in cartridge
+		P1 = 1;
+		P1 = 0; 
+
+		timer = 0; // reset timer (since reset released)
+	}
+
+#ifdef NES_6113
+	if (console) {
+		// request special 6113 mode
+		wait(3);
+		nes_6113_in_console = 1;
+		P0 = 1;	
+	else {
+		wait(6);
+		nes_6113_in_console = P0; // check if 6113 mode requested
+	}
+#endif
 }
 
 void CIC::init_timing()
 {
 #ifdef SNES_D411
-	seed_start = 630;
+	seed_start = 630; // snes/ntsc
 	data_start = 817;
 #endif
+	if (nes_6113_in_console) {
+		seed_start = 33;
+		data_start = 216;
+	}
 #ifdef NES_TENGEN
 	seed_start = 32;
 	data_start = 201;
@@ -196,6 +249,23 @@ void CIC::random_seed()
 void CIC::init_streams()
 {
 #ifdef SNES
+#if NTSC
+	x = 9;
+#elif PAL
+	x = 6;
+#endif
+	stream_from_cart = "b14f4b57fd61e98";
+	stream_from_console = "rxa185f11e10dec";
+#endif
+#ifdef NES_USA
+#endif
+#ifdef NES_EUROPE
+#endif
+#ifdef NES_HONGKONG_ASIA
+#endif
+#ifdef NES_UK_ITALY_AUSTRALIA
+#endif
+#ifdef NES_FAMICOMBOX
 #endif
 }
 
@@ -237,7 +307,30 @@ mainloop:
 
 void CIC::mangle(uint8_t buf[])
 {
-	for (int i = 100; i >= 1; --i) {
+	for (int i = buf[0x0F]+1; i >= 1; --i) {
+		a = buf[2] + buf[3] + 1;
+		if (a < 0x10) {
+			x = buf[3];
+			buf[3] = a;
+			a = x;
+			x = 1;
+		} x = 0;
+
+		buf[3 + x] += a;
+
+		for (uint8_t a = x + 6; i <= 0x0F; ++i) {
+			buf[a] += buf[a - 1] + 1; 
+		}
+
+		a = buf[4 + x] + 8;
+		if (a < 0x10) {
+			buf[5 + x] += a;
+
+		}
+
+		buf[1] += i;
+		buf[2] = !(buf[2] + buf[1] + 1);
+
 		//time += 84 - (x * 6);
 	}
 }
