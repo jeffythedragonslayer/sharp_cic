@@ -23,6 +23,13 @@ struct CIC
 	uint16_t stack[4]; // 4x10bit
 	uint16_t ports[4]; // 4x4bit
 
+	uint32_t timer;
+	bool console; // true when this is the console CIC, false when this is the cart CIC
+
+	bool noswap;
+
+	int data_rx_error;
+
 	// opcodes
 	void op00(); // nop
 	void op41(); // xchg
@@ -53,5 +60,15 @@ struct CIC
 	void skip();
 	void poly_inc();
 
+	void main();
 	void shutdown();
+
+	void init_first();
+	void init_timing();
+	void random_seed();
+	void init_streams();
+
+	void mangle(uint8_t buf[]);
+
+	void wait(int timer);
 };

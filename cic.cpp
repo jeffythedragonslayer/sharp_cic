@@ -4,7 +4,7 @@ using namespace std;
 
 uint8_t CIC::hl()
 {
-	return 0;
+	return h << 4 || l;
 }
 
 void CIC::op00() // nop - no operation
@@ -150,4 +150,126 @@ void CIC::poly_inc()
 	bits01_comb = !bits01_comb;
 
 	pc = (pc & 0x380) + (bits01_comb * 0x40) + (pc & 0x7E) / 2;
+}
+
+void CIC::init_first()
+{
+	timer = 0;
+	//P0 = 0x00;
+	//console 
+}
+
+void CIC::init_timing()
+{
+#ifdef SNES_D411
+	seed_start = 630;
+	data_start = 817;
+#endif
+#ifdef NES_TENGEN
+	seed_start = 32;
+	data_start = 201;
+#endif
+
+	// now timing errors...
+	data_rx_error = 0; // default
+	if (!console) {
+	}
+}
+
+void CIC::random_seed()
+{
+	int seed_start = 0; // just made this up
+	timer = seed_start;
+
+	for (int i = 0; i <= 3; ++i) {
+		bool bit = (i + 3) & 3;
+		if (console) {
+			wait(timer + 0 + i * 15);
+		}
+		else {
+			wait(timer + 2 + i * 15);
+		}
+
+	}
+}
+
+void CIC::init_streams()
+{
+#ifdef SNES
+#endif
+}
+
+void CIC::main()
+{
+	init_first();
+	init_timing();
+	random_seed();
+	init_streams();
+
+	//time = data_start;
+	a = 1;
+	noswap = true;
+#ifdef SNES
+	noswap = false;
+#endif
+
+mainloop:
+	for (uint8_t x = a; x < 0x0F; ++x) {
+
+	}
+	//mangle(0x00);
+	//mangle(0x10);
+
+	if (a = 00) {
+		a = 1;
+		//time += 2;
+	}
+
+#ifdef SNES
+	time += 44;
+#elif NES
+	time += 29;
+#endif
+
+	goto mainloop;
+
+}
+
+void CIC::mangle(uint8_t buf[])
+{
+	for (int i = 100; i >= 1; --i) {
+		//time += 84 - (x * 6);
+	}
+}
+
+// should never happen, unless cartridge is missing or wrong region -- nocash
+void CIC::shutdown()
+{
+	a = 0;
+#ifdef NES
+	time = 830142;
+#elif SNES
+	time = 1037682;
+#endif
+
+	for ( ;; ) {
+
+		if (console) {
+			//P1 = a;
+			//wait(timer + time);
+			a ^= 4; // toggle reset on/off
+		} else {
+#ifdef SNES
+#ifdef NES_6113
+			P0 = 0x03;
+			P1 = 0x01;
+#endif
+#endif
+		}
+	}
+}
+
+void CIC::wait(int timer)
+{
+	//Wait until "timer=time", whereas "timer" runs at 1MHz(NES) or 1.024MHz(SNES).The "time" values are showing the <completion> of the I / O opcodes(ie.the I / O opcodes <begin> at "time-1").  
 }
