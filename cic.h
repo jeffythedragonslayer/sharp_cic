@@ -75,6 +75,9 @@ struct CIC
 	void skip();
 	void poly_inc();
 
+	void push();
+	void pop();
+
 	void main();
 	void shutdown();
 

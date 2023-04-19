@@ -71,13 +71,13 @@ void CIC::op4B() // ?
 void CIC::op4C() // ret - return
 {
 	// return
-	// pop pc from stack
+	pop(); // pop pc from stack
 }
 
 void CIC::op4D() // retsk
 {
 	// return
-	// pop pc from stack
+	pop(); // pop pc from stack
 	skip();
 }
 
@@ -164,7 +164,7 @@ void CIC::op78() // jmp - long jump
 
 void CIC::op7C() // call - long call
 {
-	// push pc+2
+	push(); // push pc+2
 	// pc=nmm
 }
 
@@ -382,4 +382,12 @@ void CIC::shutdown()
 void CIC::wait(int timer)
 {
 	//Wait until "timer=time", whereas "timer" runs at 1MHz(NES) or 1.024MHz(SNES).The "time" values are showing the <completion> of the I / O opcodes(ie.the I / O opcodes <begin> at "time-1").  
+}
+
+void CIC::push()
+{
+}
+
+void CIC::pop()
+{
 }
