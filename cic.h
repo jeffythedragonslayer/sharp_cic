@@ -61,6 +61,10 @@ struct CIC
 	void op5D(); // xchg
 	void op5E(); // ???
 	void op5F(); // ?
+	void op60(); // testsk
+	void op64(); // testsk
+	void op68(); // clr
+	void op6C(); // set
 	void op70(); // add
 	void op71(); // addsk
 	void op72(); // adc
@@ -78,7 +82,7 @@ struct CIC
 	void poly_inc();
 
 	void push(uint16_t t);
-	void pop(uint16_t t);
+	uint16_t pop();
 
 	void main();
 	void shutdown();

@@ -135,6 +135,30 @@ void CIC::op5F() // ?
 {
 }
 
+void CIC::op60() // testsk
+{
+	if ( ram[hl()] & 0x01 ) {
+		skip();
+	}
+}
+
+void CIC::op64() // testsk
+{
+	if ( a & 0x01 ) {
+		skip();
+	}
+}
+
+void CIC::op68() // clr
+{
+	ram[hl()] = 0;
+}
+
+void CIC::op6C() // set
+{
+	ram[hl()] = 1;
+}
+
 void CIC::op70() // add
 {
 	a += ram[hl()];
@@ -179,7 +203,7 @@ void CIC::op78() // jmp - long jump
 
 void CIC::op7C() // call - long call
 {
-	push(); // push pc+2
+	push(pc+ 2); // push pc+2
 	// pc=nmm
 }
 
@@ -403,6 +427,7 @@ void CIC::push(uint16_t t)
 {
 }
 
-void CIC::pop(uint16_t t)
+uint16_t CIC::pop()
 {
+	return 0;
 }
